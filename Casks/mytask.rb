@@ -7,6 +7,7 @@ cask "mytask" do
   arch arm: true, intel: false
 
   # Private repo: browser download URL 404s; use GitHub release asset API.
+  # Bump asset id when publishing a new Mac source zip release.
   url "https://api.github.com/repos/dimark57/mytask/releases/assets/570577139",
       header: [
         "Accept: application/octet-stream",
@@ -21,18 +22,16 @@ cask "mytask" do
   container type: :zip
 
   postflight_steps do
-    copy ".", "~/Library/Application Support/mytask_mac", recursive: true, overwrite: true
-    set_permissions "~/Library/Application Support/mytask_mac/mytask-menubar", "0755"
-    symlink "~/Library/Application Support/mytask_mac/mytask-menubar",
+    set_permissions "mytask-menubar", "0755"
+    symlink "mytask-menubar",
             "{{HOMEBREW_PREFIX}}/bin/mytask-menubar",
             overwrite: true
-    symlink "~/Library/Application Support/mytask_mac/bin/mytask_mac",
+    symlink "bin/mytask_mac",
             "{{HOMEBREW_PREFIX}}/bin/mytask_mac",
             overwrite: true
   end
 
   uninstall_postflight_steps do
-    remove "~/Library/Application Support/mytask_mac", recursive: true
     remove "{{HOMEBREW_PREFIX}}/bin/mytask-menubar"
     remove "{{HOMEBREW_PREFIX}}/bin/mytask_mac"
   end
