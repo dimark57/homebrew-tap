@@ -37,6 +37,7 @@ class Myinstall < Formula
   end
 
   test do
+    ENV["HOME"] = testpath
     assert_match version.to_s, shell_output("#{bin}/myinstall --version")
   end
 end
