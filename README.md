@@ -2,13 +2,24 @@
 
 Homebrew packages published by dimark57.
 
-Install the `myinstall` CLI:
+## myTask server (NAS / Docker)
 
 ```bash
 brew tap dimark57/tap
-brew install dimark57/tap/myinstall
+brew install dimark57/tap/mytask-server
 ```
 
-The Formula downloads immutable release artifacts from
-[dimark57/myinstall](https://github.com/dimark57/myinstall). Server
-application lifecycle operations remain managed by `myinstall`.
+Installs `mytask-server` from [dimark57/mytask](https://github.com/dimark57/mytask) release source.
+Secrets on NAS: `/srv/nas/stacks/openbao/bao.sh mytask apply prod`.
+
+## myTask Mac menu bar
+
+```bash
+brew tap dimark57/tap
+brew install --cask dimark57/tap/mytask
+mytask-menubar
+```
+
+## Legacy
+
+`myinstall` remains in the tap for older workflows; new installs should use `mytask-server`.
