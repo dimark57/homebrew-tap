@@ -23,8 +23,8 @@ cask "mytask" do
 
   postflight_steps do
     on_macos do
-      run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "mytask-menubar"]
-      run "/usr/bin/codesign", args: ["--force", "--sign", "-", "mytask-menubar"]
+      run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{staged_path}}/mytask-menubar"]
+      run "/usr/bin/codesign", args: ["--force", "--sign", "-", "{{staged_path}}/mytask-menubar"]
     end
     set_permissions "mytask-menubar", "0755"
     symlink "mytask-menubar",
