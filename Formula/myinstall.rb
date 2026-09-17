@@ -26,12 +26,13 @@ class Myinstall < Formula
 
   def install
     artifact = Dir["myinstall-v#{version}-*"].fetch(0)
-    libexec.install artifact => "myinstall.pyz"
-    python = Formula["python@3.12"].opt_bin/"python3"
+    libexec.install artifact
+    artifact_path = libexec.join(File.basename(artifact))
+    python = Formula["python@3.12"].opt_bin.join("python3")
 
     (bin/"myinstall").write <<~SH
       #!/bin/sh
-      exec "#{python}" "#{libexec}/myinstall.pyz" "$@"
+      exec "#{python}" "#{artifact_path}" "$@"
     SH
   end
 
