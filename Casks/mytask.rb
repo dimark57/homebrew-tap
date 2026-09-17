@@ -22,6 +22,10 @@ cask "mytask" do
   container type: :zip
 
   postflight_steps do
+    on_macos do
+      run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "mytask-menubar"]
+      run "/usr/bin/codesign", args: ["--force", "--sign", "-", "mytask-menubar"]
+    end
     set_permissions "mytask-menubar", "0755"
     symlink "mytask-menubar",
             "{{HOMEBREW_PREFIX}}/bin/mytask-menubar",
