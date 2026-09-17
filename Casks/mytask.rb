@@ -4,25 +4,16 @@ cask "mytask" do
   desc "Personal GTD menu bar app"
   homepage "https://github.com/dimark57/mytask"
 
-  on_arm do
-    asset_name = "mytask-mac-v#{version}-source.zip"
+  arch arm: true, intel: false
 
-    url do
-      release = GitHub.get_release("dimark57", "mytask", "v#{version}")
-      asset = release.fetch("assets").find { |item| item["name"] == asset_name }
-      odie "GitHub release asset #{asset_name} not found" if asset.nil?
-
-      [
-        asset.fetch("url"),
-        header: [
-          "Accept: application/octet-stream",
-          "Authorization: bearer #{GitHub::API.credentials}",
-        ],
+  # Private repo: browser download URL 404s; use GitHub release asset API.
+  url "https://api.github.com/repos/dimark57/mytask/releases/assets/570577139",
+      header: [
+        "Accept: application/octet-stream",
+        "Authorization: bearer #{GitHub::API.credentials}",
       ]
-    end
 
-    sha256 "6646981bd8796101d4564e9c0f61bf1ef6ddff5540ec3b03f8e9231357854e2b"
-  end
+  sha256 "6646981bd8796101d4564e9c0f61bf1ef6ddff5540ec3b03f8e9231357854e2b"
 
   depends_on formula: "python@3.12"
   depends_on macos: :sonoma
