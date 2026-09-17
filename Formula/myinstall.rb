@@ -25,7 +25,7 @@ class Myinstall < Formula
   depends_on "python@3.12"
 
   def install
-    artifact = Dir["myinstall-v#{version}-*"].fetch
+    artifact = Dir["myinstall-v#{version}-*"].fetch(0)
     libexec.install artifact => "myinstall.pyz"
     python = Formula["python@3.12"].opt_bin/"python3"
 
