@@ -28,7 +28,7 @@ class Myinstall < Formula
     artifact = Dir["myinstall-v#{version}-*"].fetch(0)
     libexec.install artifact
     artifact_path = libexec.join(File.basename(artifact))
-    python = Formula["python@3.12"].opt_bin.join("python3")
+    python = Formula["python@3.12"].opt_libexec.join("bin/python3")
 
     (bin/"myinstall").write <<~SH
       #!/bin/sh
