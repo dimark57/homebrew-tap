@@ -5,7 +5,22 @@ cask "mytask" do
   homepage "https://github.com/dimark57/mytask"
 
   on_arm do
-    url "https://github.com/dimark57/mytask/releases/download/v#{version}/mytask-mac-v#{version}-source.zip"
+    asset_name = "mytask-mac-v#{version}-source.zip"
+
+    url do
+      release = GitHub.get_release("dimark57", "mytask", "v#{version}")
+      asset = release.fetch("assets").find { |item| item["name"] == asset_name }
+      odie "GitHub release asset #{asset_name} not found" if asset.nil?
+
+      [
+        asset.fetch("url"),
+        header: [
+          "Accept: application/octet-stream",
+          "Authorization: bearer #{GitHub::API.credentials}",
+        ],
+      ]
+    end
+
     sha256 "6646981bd8796101d4564e9c0f61bf1ef6ddff5540ec3b03f8e9231357854e2b"
   end
 
@@ -32,8 +47,7 @@ cask "mytask" do
   end
 
   caveats <<~EOS
-    Private GitHub repo: set HOMEBREW_GITHUB_API_TOKEN before install
-    (PAT with repo read, or: export HOMEBREW_GITHUB_API_TOKEN="$(gh auth token)").
+    Private GitHub repo: run `gh auth login` or set HOMEBREW_GITHUB_API_TOKEN.
 
     Run `mytask-menubar` to start the menu bar app.
   EOS
