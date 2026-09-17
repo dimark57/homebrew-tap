@@ -10,31 +10,31 @@ cask "mytask" do
   end
 
   depends_on formula: "python@3.12"
-  depends_on macos: ">= :sonoma"
+  depends_on macos: :sonoma
 
   container type: :zip
 
-  postflight do
-    require "fileutils"
-
-    dest = Pathname(Dir.home).join("Library/Application Support/mytask_mac")
-    FileUtils.mkdir_p(dest)
-    FileUtils.cp_r("#{staged_path}/.", dest, remove_destination: true)
-    FileUtils.chmod("+x", dest.join("mytask-menubar"))
-
-    bin = Pathname("#{HOMEBREW_PREFIX}/bin")
-    FileUtils.ln_sf(dest.join("mytask-menubar"), bin.join("mytask-menubar"))
-    FileUtils.ln_sf(dest.join("bin/mytask_mac"), bin.join("mytask_mac"))
+  postflight_steps do
+    copy ".", "~/Library/Application Support/mytask_mac", recursive: true, overwrite: true
+    set_permissions "~/Library/Application Support/mytask_mac/mytask-menubar", "0755"
+    symlink "~/Library/Application Support/mytask_mac/mytask-menubar",
+            "{{HOMEBREW_PREFIX}}/bin/mytask-menubar",
+            overwrite: true
+    symlink "~/Library/Application Support/mytask_mac/bin/mytask_mac",
+            "{{HOMEBREW_PREFIX}}/bin/mytask_mac",
+            overwrite: true
   end
 
-  uninstall delete: [
-    "#{Dir.home}/Library/Application Support/mytask_mac",
-    "#{HOMEBREW_PREFIX}/bin/mytask-menubar",
-    "#{HOMEBREW_PREFIX}/bin/mytask_mac",
-  ]
+  uninstall_postflight_steps do
+    remove "~/Library/Application Support/mytask_mac", recursive: true
+    remove "{{HOMEBREW_PREFIX}}/bin/mytask-menubar"
+    remove "{{HOMEBREW_PREFIX}}/bin/mytask_mac"
+  end
 
   caveats <<~EOS
+    Private GitHub repo: set HOMEBREW_GITHUB_API_TOKEN before install
+    (PAT with repo read, or: export HOMEBREW_GITHUB_API_TOKEN="$(gh auth token)").
+
     Run `mytask-menubar` to start the menu bar app.
-    Local API: `mytask_mac` (requires `python@3.12` venv setup in Application Support on first use).
   EOS
 end
