@@ -25,6 +25,10 @@ cask "mytask" do
     on_macos do
       run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{staged_path}}/mytask-menubar"]
       run "/usr/bin/codesign", args: ["--force", "--sign", "-", "{{staged_path}}/mytask-menubar"]
+      run "{{HOMEBREW_PREFIX}}/opt/python@3.12/bin/python3.12",
+          args: ["-m", "venv", "{{staged_path}}/.venv"]
+      run "{{staged_path}}/.venv/bin/pip",
+          args: ["install", "-r", "{{staged_path}}/requirements.txt"]
     end
     set_permissions "mytask-menubar", "0755"
     symlink "mytask-menubar",
