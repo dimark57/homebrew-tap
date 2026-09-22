@@ -1,16 +1,20 @@
 # typed: false
 # frozen_string_literal: true
 
+require_relative "../lib/github_release_download_strategy"
+
 class Myskills < Formula
   desc "mySkills installer — materialize skills into Cursor, OpenCode, Codex, Claude Code"
   homepage "https://github.com/dimark57/mySkills"
   version "0.1.1"
   license "MIT"
 
-  # Private repo: export HOMEBREW_GITHUB_API_TOKEN="$(gh auth token)" before brew install.
-  # releases/download/… 404 on private repos; GitHub archive + API token works.
-  url "https://github.com/dimark57/mySkills/archive/refs/tags/v#{version}.tar.gz"
-  sha256 "5b26ea3f22d02cb59695afda9c7e72ed71e685fce6546d2d309f9dca46e85835"
+  # Private repo — same as dimark57/tap/bao.rb:
+  #   export HOMEBREW_GITHUB_API_TOKEN="$(gh auth token)"
+  # Bump asset id when re-uploading myskills-x.y.z.tar.gz on GitHub Release v0.1.1.
+  url "https://api.github.com/repos/dimark57/mySkills/releases/assets/581219812",
+      using: GitHubReleaseDownloadStrategy
+  sha256 "574858f56d64ce8469e0c5af3b2b82b29613b2dd7f134da33f246cc9b67b1d41"
 
   depends_on "python@3.13"
 
@@ -24,17 +28,27 @@ class Myskills < Formula
     system Formula["python@3.13"].opt_bin/"python3.13", "-m", "venv", venv
     resource("pyyaml").stage { system venv/"bin/pip", "install", "PyYAML==6.0.2" }
 
+    src = package_source_root
     share = prefix/"share/myskills"
-    share.install "skills"
-    share.install "catalog"
-    share.install "platform"
-    libexec.install "deploy/bootstrap/myskills_cli.py"
+    share.install src/"skills"
+    share.install src/"catalog"
+    share.install src/"platform"
+    libexec.install src/"deploy/bootstrap/myskills_cli.py"
     (bin/"myskills").write <<~EOS
       #!/bin/bash
       export MY_SKILLS_PREFIX="#{share}"
       exec "#{venv}/bin/python3.13" "#{libexec}/myskills_cli.py" "$@"
     EOS
     chmod 0755, bin/"myskills"
+  end
+
+  def package_source_root
+    cand = buildpath/"mySkills-#{version}"
+    return cand if cand.directory?
+
+    return buildpath if (buildpath/"skills").directory?
+
+    odie "myskills: expected mySkills-#{version}/ or skills/ in archive"
   end
 
   def postinstall
