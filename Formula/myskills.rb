@@ -7,9 +7,9 @@ class Myskills < Formula
   version "0.1.1"
   license "MIT"
 
-  # Private repo: set HOMEBREW_GITHUB_API_TOKEN before brew install/fetch (uses GitHub API, not git clone).
-  url "https://github.com/dimark57/mySkills/archive/refs/tags/v#{version}.tar.gz"
-  sha256 "5b26ea3f22d02cb59695afda9c7e72ed71e685fce6546d2d309f9dca46e85835"
+  # Private repo: HOMEBREW_GITHUB_API_TOKEN + release asset (archive/refs/tags 404 without API quirks).
+  url "https://github.com/dimark57/mySkills/releases/download/v#{version}/myskills-#{version}.tar.gz"
+  sha256 "574858f56d64ce8469e0c5af3b2b82b29613b2dd7f134da33f246cc9b67b1d41"
 
   depends_on "python@3.13"
 
