@@ -4,13 +4,12 @@
 class Myskills < Formula
   desc "mySkills installer — materialize skills into Cursor, OpenCode, Codex, Claude Code"
   homepage "https://github.com/dimark57/mySkills"
-  version "0.1.0"
+  version "0.1.1"
   license "MIT"
 
-  # Private repo: tarball URL needs HOMEBREW_GITHUB_API_TOKEN; git fetch is reliable with `gh auth`.
-  url "https://github.com/dimark57/mySkills.git",
-      tag:      "v0.1.0",
-      revision: "7c6de790cb9c727cf2fb98b7f1846a9e1da745ab"
+  # Private repo: set HOMEBREW_GITHUB_API_TOKEN before brew install/fetch (uses GitHub API, not git clone).
+  url "https://github.com/dimark57/mySkills/archive/refs/tags/v#{version}.tar.gz"
+  sha256 "5b26ea3f22d02cb59695afda9c7e72ed71e685fce6546d2d309f9dca46e85835"
 
   depends_on "python@3.13"
 
