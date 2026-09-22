@@ -4,8 +4,7 @@ class MytaskServer < Formula
   version "0.1.83"
   license "MIT"
 
-  url "https://github.com/dimark57/mytask/archive/refs/tags/v#{version}.tar.gz",
-      using: GitHubPrivateRepositoryDownloadStrategy
+  url "https://github.com/dimark57/mytask/archive/refs/tags/v#{version}.tar.gz"
   sha256 "23b794c0b2efef2d9651e81dcc86431d11b77089b2ef4d18ee0e9f0bc6c4be37"
 
   depends_on "docker" if OS.linux?

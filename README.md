@@ -2,6 +2,19 @@
 
 Homebrew packages published by dimark57.
 
+## bao (OpenBao secrets CLI)
+
+```bash
+export HOMEBREW_GITHUB_API_TOKEN="$(gh auth token)"   # private repo tarball
+brew tap dimark57/tap
+brew install dimark57/tap/bao
+bao-secrets version
+bao-secrets help
+```
+
+On NAS, stack at `/srv/nas/stacks/openbao` is picked automatically when present; else Homebrew libexec.  
+First-time NAS stack: `sudo bao install --confirm` or curl install (see mySecrets README).
+
 ## myTask server (NAS / Docker)
 
 ```bash
