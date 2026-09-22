@@ -7,8 +7,10 @@ class Myskills < Formula
   version "0.1.0"
   license "MIT"
 
-  url "https://github.com/dimark57/mySkills/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5"
+  # Private repo: tarball URL needs HOMEBREW_GITHUB_API_TOKEN; git fetch is reliable with `gh auth`.
+  url "https://github.com/dimark57/mySkills.git",
+      tag:      "v0.1.0",
+      revision: "7c6de790cb9c727cf2fb98b7f1846a9e1da745ab"
 
   depends_on "python@3.13"
 
